@@ -86,7 +86,8 @@ export async function guardarCanal(
   }
 }
 
-const errorNumero = "Escribe un número de 8 a 15 dígitos con código de país. Puedes usar +, espacios y guiones.";
+const errorNumero =
+  "Escribe el número con el código de país, por ejemplo +591 71234567. Puedes usar +, espacios, guiones y paréntesis.";
 
 const esquemaConexion = z.object({
   responsable_email: z
@@ -96,9 +97,13 @@ const esquemaConexion = z.object({
   display_phone_number: z
     .string({ invalid_type_error: errorNumero })
     .trim()
-    .regex(/^\+?[\d -]+$/, errorNumero)
-    .transform((v) => `+${v.replace(/[+ -]/g, "")}`)
-    .refine((v) => /^\+\d{8,15}$/.test(v), errorNumero),
+    .regex(/^\+?[\d ().-]+$/, errorNumero)
+    .transform((v) => `+${v.replace(/\D/g, "")}`)
+    // Diez dígitos como mínimo, porque ese es el piso con código de país
+    // (Bolivia: 591 + 8). Si se admitieran ocho, un «63995931» quedaría
+    // guardado como «+63995931» —otro país— y el aviso del alta compararía el
+    // número conectado contra uno que el cliente nunca quiso declarar.
+    .refine((v) => /^\+\d{10,15}$/.test(v), errorNumero),
 });
 
 /**

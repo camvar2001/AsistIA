@@ -79,14 +79,15 @@ export default function FormularioConexion({
               type="tel"
               autoComplete="tel"
               className="input tabular"
-              placeholder="+591 700 00000"
+              placeholder="+591 71234567"
               required
               value={telefono}
               onChange={(e) => setTelefono(e.target.value)}
               aria-describedby="conexion_numero_ayuda"
             />
             <p id="conexion_numero_ayuda" className="mt-1.5 text-xs text-ink-soft">
-              Incluye el código de país. Puedes usar +, espacios y guiones.
+              Con el código de país, como <span className="tabular">+591 71234567</span>. El mismo
+              número que vas a conectar en la ventana de Meta.
             </p>
           </div>
         </fieldset>
